@@ -43,7 +43,6 @@ Deno.serve(async (req) => {
     const newHeaders = new Headers();
     const mandatoryHeaders = [
       'Accept',
-      'Accept-Encoding',
       'Content-Type',
       'Content-Length',
       'Connection',
@@ -85,6 +84,9 @@ Deno.serve(async (req) => {
     res.headers.append('Vary', 'Origin');
     res.headers.delete('Content-Security-Policy');
     res.headers.delete('X-Frame-Options');
+    // Deno 2.9+ fetch() decodes the body but keeps the upstream header.
+    res.headers.delete('Content-Encoding');
+    res.headers.delete('Content-Length');
 
     return res;
   }
